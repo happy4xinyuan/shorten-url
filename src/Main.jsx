@@ -15,6 +15,7 @@ import "./Main.css";
 
 export default function Main() {
   const [formData, setformData] = React.useState({ url: "", uid: 777});
+  const inputRef = React.useRef(null);
 
   const handleFormDataChange = (event) => {
     const { value } = event.target;
@@ -23,23 +24,25 @@ export default function Main() {
 
   const handleShortenUrl = (event) => {
     event.preventDefault();
+    inputRef.current.value = "";
     if(formData.url.length === 0) {
       alert("empty Url! please input your long Url");
+    } else {
+      fetch('http://168.5.149.239:8080/shortenUrl', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.shortUrl);
+        const queryString = new URLSearchParams({"url": data.shortUrl}).toString();
+        window.location.href = "/result?" + queryString;
+      })
+      .catch(error => console.error(error));
     }
-    fetch('http://168.5.149.239:8080/shortenUrl', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.shortUrl);
-      const queryString = new URLSearchParams({"url": data.shortUrl}).toString();
-      window.location.href = "/result?" + queryString;
-    })
-    .catch(error => console.error(error));
   };
 
   return (
@@ -72,6 +75,7 @@ export default function Main() {
                   variant="outlined"
                   placeholder="Enter the link here"
                   value={formData.longUrl}
+                  inputRef={inputRef}
                   onChange={handleFormDataChange}
                 />
                 <Button
