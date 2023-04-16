@@ -28,7 +28,7 @@ export default function Main() {
     if(formData.url.length === 0) {
       alert("empty Url! please input your long Url");
     } else {
-      fetch('http://168.5.149.239:8080/shortenUrl', {
+      fetch('https://sslt1.herokuapp.com/shortenUrl', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
