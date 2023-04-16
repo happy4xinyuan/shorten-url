@@ -74,7 +74,7 @@ export default function Result() {
                   style={{ width: "60%" }}
                   variant="outlined"
                   inputRef={inputRef}
-                  value={formData?.longUrl || ""}
+                  value={formData?.url || ""}
                 />
                 <Button variant="contained" style={{ height: "40px" ,marginLeft: '5px'}} onClick={handleCopyClick}>
                   Copy URL

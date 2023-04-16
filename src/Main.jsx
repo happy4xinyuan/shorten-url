@@ -14,37 +14,32 @@ import imgURL from "./img/ssl-logo.png";
 import "./Main.css";
 
 export default function Main() {
-  const [formData, setformData] = React.useState({ longUrl: "" });
+  const [formData, setformData] = React.useState({ url: "", uid: 777});
 
   const handleFormDataChange = (event) => {
     const { value } = event.target;
-    setformData({ longUrl: value });
+    setformData({ url: value });
   };
 
   const handleShortenUrl = (event) => {
-    // event.preventDefault();
-    // if(formData.longUrl.length === 0) {
-    //   alert("empty Url! please input your long Url");
-    // }
-    // fetch('http://example.com/api/login', {
-    //   method: 'POST',
-    //   body: JSON.stringify(formData),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //   console.log(data);
-    //   history.push({
-    //     pathname: '/result',
-    //     state: { result: "我想试一试" } // 将结果数据作为参数传递给新页面
-    //   });
-    // })
-    // .catch(error => console.error(error));
-    // this.props.history.push('/result');
-    const queryString = new URLSearchParams(formData).toString();
-    window.location.href = "/result?" + queryString;
+    event.preventDefault();
+    if(formData.url.length === 0) {
+      alert("empty Url! please input your long Url");
+    }
+    fetch('http://168.5.149.239:8080/shortenUrl', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.shortUrl);
+      const queryString = new URLSearchParams({"url": data.shortUrl}).toString();
+      window.location.href = "/result?" + queryString;
+    })
+    .catch(error => console.error(error));
   };
 
   return (
