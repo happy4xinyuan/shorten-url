@@ -17,7 +17,7 @@ function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="/">
         ShortShortLong Team 1
       </Link>{' '}
       {new Date().getFullYear()}
@@ -71,16 +71,6 @@ export default function SignIn(props) {
               autoComplete="userName"
               autoFocus
             />
-            {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            /> */}
             <TextField
               margin="normal"
               required
