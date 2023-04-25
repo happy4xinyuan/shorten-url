@@ -28,7 +28,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn(props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,6 +36,10 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const user = data.get('userName');
+    props.setUser(user);
+    sessionStorage.setItem('user', user+"");
+    window.location.href = "/";
   };
 
   return (
@@ -57,7 +61,17 @@ export default function SignIn() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
+          <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="userName"
+              label="User Name"
+              name="userName"
+              autoComplete="userName"
+              autoFocus
+            />
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -66,7 +80,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-            />
+            /> */}
             <TextField
               margin="normal"
               required

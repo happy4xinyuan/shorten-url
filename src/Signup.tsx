@@ -28,7 +28,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function SignUp(props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,6 +36,11 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const user = data.get('firstName')+" "+data.get('lastName')+"";
+    props.setUser(user);
+    console.log(user);
+    sessionStorage.setItem('user', user+"");
+    window.location.href = "/";
   };
 
   return (

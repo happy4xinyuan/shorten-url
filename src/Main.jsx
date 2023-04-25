@@ -22,6 +22,11 @@ export default function Main() {
     setformData({ url: value });
   };
 
+  const signup = () =>{
+    window.location.href = "/signup"; 
+  }
+  const user = sessionStorage.getItem('user');
+
   const handleShortenUrl = (event) => {
     event.preventDefault();
     inputRef.current.value = "";
@@ -39,6 +44,7 @@ export default function Main() {
       .then(data => {
         console.log(data.shortUrl);
         const queryString = new URLSearchParams({"url": data.shortUrl}).toString();
+        console.log("/result?" + queryString);
         window.location.href = "/result?" + queryString;
       })
       .catch(error => console.error(error));
@@ -47,7 +53,7 @@ export default function Main() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Header/>
+      <Header user={user}/>
       <Container maxWidth="md" className="main-container">
         <Card variant="outlined">
           <Container
@@ -105,7 +111,7 @@ export default function Main() {
               Custom short links, powerful dashboard, detailed analytics,
               browser extension and more. Only $8.99/month
             </p>
-            <Button variant="contained">Create Account</Button>
+            <Button variant="contained" onClick={signup}>Create Account</Button>
           </CardContent>
         </Card>
       </Container>
