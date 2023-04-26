@@ -135,7 +135,7 @@ export default function Analysis() {
   return (
     <div>
       <Header user={user} />
-      <h1 className="text-header"> Monthly Shorten-URL Service Used in the Past Year </h1>
+      <h1 className="text-header"> Monthly Shorten-URL Service Generated in the Past Year </h1>
       <ReactEchart className="container" option={eChartsOption}></ReactEchart>
       <h1 className="text-header" style={{ witdh: "80%" }}>
         {" "}
