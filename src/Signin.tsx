@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DOMAIN_URL } from './DeployConfig';
 
 function Copyright(props: any) {
   return (
@@ -33,14 +34,35 @@ export default function SignIn(props) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      username: data.get('userName'),
       password: data.get('password'),
     });
-    const user = data.get('userName');
-    props.setUser(user);
-    sessionStorage.setItem('user', user+"");
-    window.location.href = "/";
+    signIn(data);
   };
+
+  const signIn = (data) => fetch(DOMAIN_URL + "/userLogin", {
+    method: "POST",
+    body: JSON.stringify({
+      username: data.get('userName'),
+      password: data.get('password'),
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if(data.loginStatus !== "Login Succeed.") {
+        alert("Wrong password");
+      } else {
+        sessionStorage.setItem('uid', data.uid);
+        sessionStorage.setItem('user', data.username);
+        window.location.href = "/";
+      }
+    })
+    .catch((error) => console.error(error));
+
 
   return (
     <ThemeProvider theme={theme}>

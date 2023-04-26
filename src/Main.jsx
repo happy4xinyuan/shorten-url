@@ -17,9 +17,9 @@ import { DOMAIN_URL } from "./DeployConfig";
 import "./Main.css";
 
 export default function Main() {
-  const [formData, setformData] = React.useState({ url: "", uid: 777 });
+  const [formData, setformData] = React.useState( {url: ""});
   const inputRef = React.useRef(null);
-  // const uid = sessionStorage.getItem('uid');
+  const uid = sessionStorage.getItem('uid');
 
   const handleFormDataChange = (event) => {
     const { value } = event.target;
@@ -42,7 +42,10 @@ export default function Main() {
     } else {
       fetch(DOMAIN_URL+"/shortenUrl", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          url: formData.url,
+          uid:uid,
+        }),
         headers: {
           "Content-Type": "application/json",
         },

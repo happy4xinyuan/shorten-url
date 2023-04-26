@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DOMAIN_URL } from './DeployConfig';
+import { PublishedWithChanges } from '@mui/icons-material';
 
 function Copyright(props: any) {
   return (
@@ -32,16 +34,54 @@ export default function SignUp(props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    const user = data.get('firstName')+" "+data.get('lastName')+"";
-    props.setUser(user);
+    const user = data.get('userName');
     console.log(user);
-    sessionStorage.setItem('user', user+"");
-    window.location.href = "/";
+    createUser(data);
   };
+
+  const createUser = (dataInput) => fetch(DOMAIN_URL + "/createAccount", {
+    method: "POST",
+    body: JSON.stringify({
+      username: dataInput.get('userName'),
+      password: dataInput.get('password'),
+      email: dataInput.get('email')
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if(data.status!=="Create user success."){
+        alert("Sorry, fail to create sucess. Maybe username or email used by others...")
+      } else {
+        signIn(dataInput);
+      }
+    })
+    .catch((error) => console.error(error));
+
+    const signIn = (data) => fetch(DOMAIN_URL + "/userLogin", {
+      method: "POST",
+      body: JSON.stringify({
+        username: data.get('userName'),
+        password: data.get('password'),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if(data.loginStatus !== "Login Succeed.") {
+          alert("Failed to Login to this new account. Please login manually...");
+        } else {
+          sessionStorage.setItem('uid', data.uid);
+          sessionStorage.setItem('user', data.username);
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => console.error(error));
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,25 +103,15 @@ export default function SignUp(props) {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  autoComplete="name"
+                  name="userName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="userName"
+                  label="User Name"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
